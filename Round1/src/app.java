@@ -4,12 +4,11 @@
  * and open the template in the editor.
  */
 
-
 /**
  *
- * @author Cameron
+ * @author Shane
  */
-public class Round1 {
+public class app {
 
     /**
      * @param args the command line arguments
