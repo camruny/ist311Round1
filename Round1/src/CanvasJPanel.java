@@ -8,10 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class CanvasJPanel extends JPanel implements MouseMotionListener, ActionListener {
+public class CanvasJPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
     JPanel p1;
     JButton green, blue, red, black, erase, thick, thin, regular;
     int thickness = 5;
@@ -33,6 +34,7 @@ public class CanvasJPanel extends JPanel implements MouseMotionListener, ActionL
         p1.setLayout(new GridLayout(2,2));
         add(p1,"South");
         addMouseMotionListener(this);
+        addMouseListener(this);
 
         //Adds the thickness controls
         thin = new JButton("Thin");
@@ -84,7 +86,42 @@ public class CanvasJPanel extends JPanel implements MouseMotionListener, ActionL
     
     public void mouseDragged(MouseEvent e) {
         Point pt = e.getPoint();
-        getGraphics().fillOval((int)pt.getX(),(int)pt.getY(),thickness,thickness);
+        getGraphics().fillOval((pt.x - (thickness/2)), (pt.y - (thickness/2)), thickness, thickness);
+        
+        //saves the location of each pixel
+        ps[index]=pt;
+        //saves the color of each pixel
+        pc[index] = color;
+        //saves the thickness of each pixel
+        pnt[index] = thickness;
+        index = index + 1;
+ 
+        //prevents the pixel array from being exceeded and causing a crash
+        if(index >=10000)  {
+            index = 0;
+        }
+        repaint();
+    }
+    
+    public void mouseEntered(MouseEvent e){
+        
+    }
+    
+    public void mouseExited(MouseEvent e){
+        
+    }
+    
+    public void mousePressed(MouseEvent e){
+        
+    }
+    
+    public void mouseReleased(MouseEvent e){
+        
+    }
+    
+    public void mouseClicked(MouseEvent e){
+        Point pt = e.getPoint();
+        getGraphics().fillOval(pt.x, pt.y, thickness, thickness);
         
         //saves the location of each pixel
         ps[index]=pt;
