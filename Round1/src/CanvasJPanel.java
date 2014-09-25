@@ -35,7 +35,7 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
     int[]pnt = new int[10000];
     //Counts the number of points in the point ps array
     int index = 0;
-    String color;
+    String color = "black";
     String shape = "square";
     
     public CanvasJPanel()   {
@@ -77,19 +77,18 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
         save = new JButton("Save");
         save.addActionListener(this);
         
+        round = new JButton("Round");
+        round.addActionListener(this);
+        
+        square = new JButton("Square");
+        square.addActionListener(this);
+        
         //Add choices to panel
         p1.add(red);
         p1.add(blue);
         p1.add(black);
-        
-        round = new JButton("Round");
-        round.addActionListener(this);
         p1.add(round);
-        
-        square = new JButton("Square");
-        square.addActionListener(this);
         p1.add(square);
-
         p1.add(erase);
         p1.add(jl1);
         p1.add(js1);
@@ -121,23 +120,91 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
     
     int save() throws IOException   {
         int success=0;
+        
+        //empties the location file
+        PrintWriter pLocationWriter = new PrintWriter("plocation.txt");
+        pLocationWriter.print("");
+        pLocationWriter.close();
+        
+        //empties the size file
+        PrintWriter pSizeWriter = new PrintWriter("psize.txt");
+        pSizeWriter.print("");
+        pSizeWriter.close();
+        
+        //empties the color file
+        PrintWriter pColorWriter = new PrintWriter("pcolor.txt");
+        pColorWriter.print("");
+        pColorWriter.close();
+        
+        //empties the shape file
+        PrintWriter pShapeWriter = new PrintWriter("pshape.txt");
+        pShapeWriter.print("");
+        pShapeWriter.close();
+        
+        //saves the location data
         try {
-            PrintWriter pr = new PrintWriter("paint.txt");    
+            PrintWriter plocation = new PrintWriter("plocation.txt");    
 
             for (int i=0; i<index ; i++)
             {
-                pr.println(ps[i]);
-                pr.println(pc[i]);
-                pr.println(pnt[i]);
+                plocation.println(ps[i]);
             }
-            pr.close();
-            success = 1;
+            plocation.close();
         }
         catch (Exception e)
         {
             e.printStackTrace();
             System.out.println("No such file exists.");
         }
+        
+        //saves the thickness data
+        try {
+            PrintWriter psize = new PrintWriter("psize.txt");    
+
+            for (int i=0; i<index ; i++)
+            {
+                psize.println(pnt[i]);
+            }
+            psize.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("No such file exists.");
+        }
+        
+        //saves the color data
+        try {
+            PrintWriter pcolor = new PrintWriter("pcolor.txt");    
+
+            for (int i=0; i<index ; i++)
+            {
+                pcolor.println(pc[i]);
+            }
+            pcolor.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("No such file exists.");
+        }
+        
+        //saves the shape data
+        try {
+            PrintWriter pshape = new PrintWriter("pshape.txt");    
+
+            for (int i=0; i<index ; i++)
+            {
+                pshape.println(ps[i]);
+            }
+            pshape.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("No such file exists.");
+        }
+        
         return success; 
     }
     
@@ -155,8 +222,7 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
             psh[index] = "round";
         }
 
-        getGraphics().fillRect((pt.x - (thickness/2)), (pt.y - (thickness/2)), thickness, thickness);
-
+        //getGraphics().fillRect((pt.x - (thickness/2)), (pt.y - (thickness/2)), thickness, thickness);
         
         //saves the location of each pixel
         ps[index]=pt;
@@ -202,9 +268,8 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
         getGraphics().fillOval(pt.x, pt.y, thickness, thickness);
         }
 
-        getGraphics().fillRect(pt.x, pt.y, thickness, thickness);
+        //getGraphics().fillRect(pt.x, pt.y, thickness, thickness);
 
-        
         //saves the location of each pixel
         ps[index]=pt;
         //saves the color of each pixel
@@ -234,12 +299,14 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
         if(obj == round) {shape = "round";}
         if(obj == square) {shape = "square";}
 
-        if(obj == save) {try {
-            save();
+        if(obj == save)
+        {
+            try{
+                save();
             } catch (IOException ex) {
                 Logger.getLogger(CanvasJPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
-}
+        }
     }
     
     public void stateChanged(ChangeEvent e){
