@@ -19,6 +19,7 @@ import javax.swing.event.ChangeListener;
 public class CanvasJPanel extends JPanel implements ChangeListener, MouseListener, MouseMotionListener, ActionListener {
     JPanel p1;
     JButton green, blue, red, black, erase, thick, thin, regular;
+    JButton save;
     JSlider js1;
     JLabel jl1;
     int thickness = 20;
@@ -31,7 +32,6 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
     //Counts the number of points in the point ps array
     int index = 0;
     String color;
-    
     
     public CanvasJPanel()   {
         setBackground(Color.green);
@@ -69,13 +69,17 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
         black = new JButton("Black");
         black.addActionListener(this);
         
+        save = new JButton("Save");
+        save.addActionListener(this);
+        
         //Add choices to panel
         p1.add(red);
         p1.add(blue);
         p1.add(black);
+        p1.add(erase);
         p1.add(jl1);
         p1.add(js1);
-        p1.add(erase);
+        p1.add(save);
     }
     
     public void paintComponent(Graphics g)  {
