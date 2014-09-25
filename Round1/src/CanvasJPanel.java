@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 public class CanvasJPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
     JPanel p1;
     JButton green, blue, red, black, erase, thick, thin, regular;
+    JButton save;
     int thickness = 5;
     //Saves the point coordinates
     Point[]ps = new Point[10000];
@@ -66,6 +67,10 @@ public class CanvasJPanel extends JPanel implements MouseListener, MouseMotionLi
         black = new JButton("Black");
         black.addActionListener(this);
         p1.add(black);
+        
+        save = new JButton("Save");
+        save.addActionListener(this);
+        p1.add(save);
     }
     
     public void paintComponent(Graphics g)  {
