@@ -10,12 +10,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseListener;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public class CanvasJPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
+public class CanvasJPanel extends JPanel implements ChangeListener, MouseListener, MouseMotionListener, ActionListener {
     JPanel p1;
     JButton green, blue, red, black, erase, thick, thin, regular;
-    int thickness = 5;
+    JSlider js1;
+    JLabel jl1;
+    int thickness = 20;
     //Saves the point coordinates
     Point[]ps = new Point[10000];
     //Saves the color for each point
@@ -36,36 +42,40 @@ public class CanvasJPanel extends JPanel implements MouseListener, MouseMotionLi
         addMouseMotionListener(this);
         addMouseListener(this);
 
-        //Adds the thickness controls
-        thin = new JButton("Thin");
-        thin.addActionListener(this);
-        p1.add(thin);
+        //Thickness Slider
+        js1 = new JSlider();
+        js1.setMaximum(20);
+        js1.setMinimum(1);
+        js1.setMajorTickSpacing(4);
+        js1.setMinorTickSpacing(1);
+        js1.setPaintTicks(true);
+        js1.setPaintLabels(true);
+        js1.addChangeListener(this);
         
-        regular = new JButton("Regular");
-        regular.addActionListener(this);
-        p1.add(regular);
-        
-        thick = new JButton("Thick");
-        thick.addActionListener(this);
-        p1.add(thick);
+        //Create Thickness Slider Label
+        jl1 = new JLabel("Thickness: ");
         
         //Adds the eraser
         erase = new JButton("Erase");
-        p1.add(erase);
         erase.addActionListener(this);
         
         //Adds the color controls
         red = new JButton("Red");
         red.addActionListener(this);
-        p1.add(red);
         
         blue = new JButton("Blue");
         blue.addActionListener(this);
-        p1.add(blue);
         
         black = new JButton("Black");
         black.addActionListener(this);
+        
+        //Add choices to panel
+        p1.add(red);
+        p1.add(blue);
         p1.add(black);
+        p1.add(jl1);
+        p1.add(js1);
+        p1.add(erase);
     }
     
     public void paintComponent(Graphics g)  {
@@ -76,7 +86,7 @@ public class CanvasJPanel extends JPanel implements MouseListener, MouseMotionLi
             if(pc[k] == "blue")     {g.setColor(Color.blue);}
             if(pc[k] == "red")      {g.setColor(Color.red);}
             if(pc[k] == "black")    {g.setColor(Color.black);}
-            g.fillOval (ps[k].x, ps[k].y, pnt[k],pnt[k]);
+            g.fillRect (ps[k].x, ps[k].y, pnt[k],pnt[k]);
         }
     }
 
@@ -86,7 +96,7 @@ public class CanvasJPanel extends JPanel implements MouseListener, MouseMotionLi
     
     public void mouseDragged(MouseEvent e) {
         Point pt = e.getPoint();
-        getGraphics().fillOval((pt.x - (thickness/2)), (pt.y - (thickness/2)), thickness, thickness);
+        getGraphics().fillRect((pt.x - (thickness/2)), (pt.y - (thickness/2)), thickness, thickness);
         
         //saves the location of each pixel
         ps[index]=pt;
@@ -121,7 +131,7 @@ public class CanvasJPanel extends JPanel implements MouseListener, MouseMotionLi
     
     public void mouseClicked(MouseEvent e){
         Point pt = e.getPoint();
-        getGraphics().fillOval(pt.x, pt.y, thickness, thickness);
+        getGraphics().fillRect(pt.x, pt.y, thickness, thickness);
         
         //saves the location of each pixel
         ps[index]=pt;
@@ -148,5 +158,13 @@ public class CanvasJPanel extends JPanel implements MouseListener, MouseMotionLi
         if(obj == red) {color = "red";}
         if(obj == blue) {color = "blue";}
         if(obj == black) {color = "black";}
+    }
+    
+    public void stateChanged(ChangeEvent e){
+        Object obj = e.getSource();
+        
+        if(obj == js1){
+            thickness = js1.getValue();
+        }
     }
 }
