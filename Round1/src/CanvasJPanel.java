@@ -1,4 +1,3 @@
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -22,7 +21,7 @@ import javax.swing.event.ChangeListener;
 
 public class CanvasJPanel extends JPanel implements ChangeListener, MouseListener, MouseMotionListener, ActionListener {
     JPanel p1;
-    JButton green, blue, red, black, erase, thick, thin, regular;
+    JButton green, blue, red, black, erase, thick, thin, regular, round, square;
     JButton save;
     JSlider js1;
     JLabel jl1;
@@ -32,10 +31,12 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
     //Saves the color for each point
     String[]pc = new String[10000];
     //Saves the thickness for each point
+    String[]psh = new String[10000];
     int[]pnt = new int[10000];
     //Counts the number of points in the point ps array
     int index = 0;
     String color;
+    String shape = "square";
     
     public CanvasJPanel()   {
         setBackground(Color.green);
@@ -80,6 +81,15 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
         p1.add(red);
         p1.add(blue);
         p1.add(black);
+        
+        round = new JButton("Round");
+        round.addActionListener(this);
+        p1.add(round);
+        
+        square = new JButton("Square");
+        square.addActionListener(this);
+        p1.add(square);
+
         p1.add(erase);
         p1.add(jl1);
         p1.add(js1);
@@ -94,7 +104,14 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
             if(pc[k] == "blue")     {g.setColor(Color.blue);}
             if(pc[k] == "red")      {g.setColor(Color.red);}
             if(pc[k] == "black")    {g.setColor(Color.black);}
-            g.fillRect (ps[k].x, ps[k].y, pnt[k],pnt[k]);
+            if(psh[k].equals("square"))
+            {
+            g.fillRect (ps[k].x, ps[k].y, pnt[k],pnt[k]);    
+            }
+            else if (psh[k].equals("round"))
+            {
+            g.fillOval (ps[k].x, ps[k].y, pnt[k],pnt[k]);
+            }   
         }
     }
 
@@ -104,11 +121,6 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
     
     int save() throws IOException   {
         int success=0;
-        
-        PrintWriter writer = new PrintWriter("paint.txt");
-        writer.print("");
-        writer.close();
-        
         try {
             PrintWriter pr = new PrintWriter("paint.txt");    
 
@@ -131,7 +143,20 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
     
     public void mouseDragged(MouseEvent e) {
         Point pt = e.getPoint();
+        
+        if(shape.equals("square"))
+        {
+            getGraphics().fillRect((pt.x - (thickness/2)), (pt.y - (thickness/2)), thickness, thickness);
+            psh[index] = "square";
+        }
+        else if(shape.equals("round"))
+        {
+            getGraphics().fillOval((pt.x - (thickness/2)), (pt.y - (thickness/2)), thickness, thickness);
+            psh[index] = "round";
+        }
+
         getGraphics().fillRect((pt.x - (thickness/2)), (pt.y - (thickness/2)), thickness, thickness);
+
         
         //saves the location of each pixel
         ps[index]=pt;
@@ -139,6 +164,7 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
         pc[index] = color;
         //saves the thickness of each pixel
         pnt[index] = thickness;
+         
         index = index + 1;
  
         //prevents the pixel array from being exceeded and causing a crash
@@ -166,7 +192,18 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
     
     public void mouseClicked(MouseEvent e){
         Point pt = e.getPoint();
+
+        if(shape.equals("square"))
+        {
         getGraphics().fillRect(pt.x, pt.y, thickness, thickness);
+        }
+        else if(shape.equals("round"))
+        {
+        getGraphics().fillOval(pt.x, pt.y, thickness, thickness);
+        }
+
+        getGraphics().fillRect(pt.x, pt.y, thickness, thickness);
+
         
         //saves the location of each pixel
         ps[index]=pt;
@@ -193,6 +230,10 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
         if(obj == red) {color = "red";}
         if(obj == blue) {color = "blue";}
         if(obj == black) {color = "black";}
+
+        if(obj == round) {shape = "round";}
+        if(obj == square) {shape = "square";}
+
         if(obj == save) {try {
             save();
             } catch (IOException ex) {
@@ -208,5 +249,4 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
             thickness = js1.getValue();
         }
     }
-    
 }
