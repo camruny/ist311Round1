@@ -104,6 +104,11 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
     
     int save() throws IOException   {
         int success=0;
+        
+        PrintWriter writer = new PrintWriter("paint.txt");
+        writer.print("");
+        writer.close();
+        
         try {
             PrintWriter pr = new PrintWriter("paint.txt");    
 
@@ -204,19 +209,4 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
         }
     }
     
-    public void stateChanged(ChangeEvent e){
-        Object obj = e.getSource();
-        
-        if(obj == js1){
-            thickness = js1.getValue();
-        }
-    }
-    
-    public void stateChanged(ChangeEvent e){
-        Object obj = e.getSource();
-        
-        if(obj == js1){
-            thickness = js1.getValue();
-        }
-    }
 }
