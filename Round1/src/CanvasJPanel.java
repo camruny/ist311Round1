@@ -22,8 +22,6 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
     JSlider js1;
     JLabel jl1;
     int thickness = 20;
-    JButton save;
-    
     //Saves the point coordinates
     Point[]ps = new Point[10000];
     //Saves the color for each point
@@ -78,10 +76,6 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
         p1.add(jl1);
         p1.add(js1);
         p1.add(erase);
-        
-        save = new JButton("Save");
-        save.addActionListener(this);
-        p1.add(save);
     }
     
     public void paintComponent(Graphics g)  {
