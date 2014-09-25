@@ -9,6 +9,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -98,6 +102,28 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
        
     }
     
+    int save() throws IOException   {
+        int success=0;
+        try {
+            PrintWriter pr = new PrintWriter("paint.txt");    
+
+            for (int i=0; i<index ; i++)
+            {
+                pr.println(ps[i]);
+                pr.println(pc[i]);
+                pr.println(pnt[i]);
+            }
+            pr.close();
+            success = 1;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("No such file exists.");
+        }
+        return success; 
+    }
+    
     public void mouseDragged(MouseEvent e) {
         Point pt = e.getPoint();
         getGraphics().fillRect((pt.x - (thickness/2)), (pt.y - (thickness/2)), thickness, thickness);
@@ -162,6 +188,28 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
         if(obj == red) {color = "red";}
         if(obj == blue) {color = "blue";}
         if(obj == black) {color = "black";}
+        if(obj == save) {try {
+            save();
+            } catch (IOException ex) {
+                Logger.getLogger(CanvasJPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+}
+    }
+    
+    public void stateChanged(ChangeEvent e){
+        Object obj = e.getSource();
+        
+        if(obj == js1){
+            thickness = js1.getValue();
+        }
+    }
+    
+    public void stateChanged(ChangeEvent e){
+        Object obj = e.getSource();
+        
+        if(obj == js1){
+            thickness = js1.getValue();
+        }
     }
     
     public void stateChanged(ChangeEvent e){
