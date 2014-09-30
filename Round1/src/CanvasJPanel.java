@@ -45,7 +45,7 @@ public class CanvasJPanel extends JPanel implements ChangeListener, MouseListene
         
         //Create Thickness Slider Listener and Label
         p1.js1.addChangeListener(this);
-        jl1 = new JLabel("Thickness: ");
+        jl1 = new JLabel("Thickness: 20");
         
         //Adds the eraser
         erase = new JButton("Erase");
